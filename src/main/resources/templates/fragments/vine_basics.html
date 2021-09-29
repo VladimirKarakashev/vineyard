@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>basics</title>
+    <link rel="stylesheet" th:href="@{style.css}" />
+    <link rel="stylesheet" th:href="@{scrollbar.css}" />
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+    />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+    />
+</head>
+<body>
+
+<div class="description"  th:fragment="vine_basics">
+
+    <h1>
+        База знания за начинаещи лозари:
+    </h1>
+
+
+    <a style="position: fixed; z-index: 999;" th:href="@{/basics/useful_tips}">
+         Полезни съвети
+    </a>
+
+
+    </br>
+
+    <a style="position: fixed; z-index: 999;" th:href="@{/basics/common_mistakes}">
+         Често допускани грешки
+    </a>
+
+    </br>
+
+    <a style="position: fixed; z-index: 999;" th:href="@{/basics/pests}">
+        Вредители по лозата
+    </a>
+
+    </br>
+
+    <a style="position: fixed; z-index: 999;" th:href="@{/basics/illnesses}">
+        Болести по лозата
+    </a>
+
+    </br>
+
+    <p>
+        <a style="position: fixed; z-index: 999;" th:href="@{/basics/terminology}">
+             Някои термини и понятия
+        </a>
+    </p>
+
+</div>
+
+</body>
+</html>

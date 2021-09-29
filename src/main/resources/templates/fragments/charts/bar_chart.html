@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+</head>
+<body>
+    <div id="bar-chart" th:fragment="bar_chart">
+        <div class="bar-chart-container">
+
+            <div id="bar-chart-container"
+                 style="width: 80%; height: 40%; margin: 0 auto">
+
+            </div>
+        </div>
+
+        <script th:inline="javascript">
+        /*<![CDATA[*/
+
+            $(function () {
+                const chart = Highcharts.chart('bar-chart-container', {
+                    chart: {
+                        type: 'bar',
+                        styledMode: false,
+                        style: {
+                            fontFamily: 'Quicksand',
+                            color: '#eee',
+                        }
+                    },
+                    title: {
+                        text: 'Разход на време и средства'
+                    },
+                    subtitle: {
+                        text: 'по вид операция'
+                    },
+                    xAxis: {
+                        categories: [[${mapListOpsName}]],
+                        style: {
+                            fill: '#eee',
+                        },
+                    },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'Време / ч.',
+                            data: [[${mapListOpsTime}]]
+                        },
+                        {
+                            name: 'Операции / бр.',
+                            data: [[${listCountOps}]]
+                        },
+                        {
+                            name: 'Разходи / лв.',
+                            data: [[${listCountCosts}]]
+                        }
+                    ]
+                });
+            });
+        /*]]>*/
+        </script>
+    </div>
+</body>
+</html>

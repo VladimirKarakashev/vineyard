@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendar</title>
+    <link rel="stylesheet" th:href="@{style.css}" />
+    <link rel="stylesheet" th:href="@{scrollbar.css}" />
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+    />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+    />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+<div class="infoboard-frame">
+    <div class="menu">
+        <div class="menu-items">
+            <a id="m1" class="nav-link" th:href="@{/index}">
+                <div>Култура</div>
+            </a>
+            &nbsp;&nbsp;&nbsp;
+            <a id="m2" class="nav-link" th:href="@{/phenophase}">
+                <div>Фенофаза</div>
+            </a>
+            &nbsp;&nbsp;&nbsp;
+            <a id="m3" class="nav-link" th:href="@{/operations}">
+                <div>Операции</div>
+            </a>
+            &nbsp;&nbsp;&nbsp;
+            <a id="m4" class="nav-link" th:href="@{/logout}">
+                <div>Изход</div>
+            </a>
+        </div>
+    </div>
+
+    <div class="infoboard">
+        <div class="display-info">
+            <div align="center">
+                <h1>Операции</h1>
+                <div style="margin-bottom: 10px;">
+                    <a id="newOp" href="new_operation">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                            <path d="m.5 3 .04.87a1.99 1.99 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2zm5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19c-.24 0-.47.042-.683.12L1.5 2.98a1 1 0 0 1 1-.98h3.672z"/>
+                            <path d="M13.5 10a.5.5 0 0 1 .5.5V12h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V13h-1.5a.5.5 0 0 1 0-1H13v-1.5a.5.5 0 0 1 .5-.5z"/>
+                        </svg>
+                        Нова операция
+                    </a>
+                </div>
+            </div>
+
+            <div align="center" style="margin-bottom: 15px;">
+                <form name="stat-controls" th:action="@{/operations}">
+                    <input class="mb-2" id="shearchKey" type="text" name="key" th:value="${key}" placeholder="Филтър:"/>
+                    &nbsp;
+                    <input class="btn" id="find" type="submit" value="Търси" />
+                    &nbsp;
+                    <input class="btn" id="cls" type="button" value="Изчисти" onclick="clearFilter()"/>
+                    &nbsp;
+                    <input class="btn" id="statbtn" type="button" value="Статистика" onclick="showStats()"/>
+                </form>
+            </div>
+
+        <div id="stats" class="stats" style="display: none; margin-bottom: 15px;" align="center">
+            <p
+                 th:text="'Селекция от ' + ${opsCount}
+                          + ' операции, с общи разходи '
+                          + ${#numbers.formatDecimal(opsTotalCosts,1,2,'COMMA')} + ' лв.'
+                          + ' и продължителност от '
+                          + ${#numbers.formatDecimal(opsTimeSpent,1,0,'COMMA')} + ' часа.' ">
+            </p>
+            <div>&nbsp;</div>
+            <div
+                 th:replace="~{fragments/charts/bar_chart :: bar_chart}">
+            </div>
+
+        </div>
+
+        <div align="center">
+                <table class="ops-table" border="1" cellpadding="10">
+                    <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>Дата</th>
+                            <th>Вид</th>
+                            <th>Стойност / лв.</th>
+                            <th>Време / ч.</th>
+                            <th>Редактирай / Изтрий</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="operation : ${listOperations}">
+                            <td th:text="${operation.id}">op ID</td>
+                            <td th:text="${operation.date}">op Date</td>
+                            <td th:text="${operation.name}">op Type</td>
+                            <td th:text="${operation.cost}">op Cost</td>
+                            <td th:text="${operation.duration}">op Duration</td>
+                            <td>
+                                <a th:id="@{opedit + ${operation.id}}" th:href="@{'/edit_operation/' + ${operation.id}}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-journal-text" viewBox="0 0 16 16">
+                                        <path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+                                        <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>
+                                        <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
+                                    </svg>
+                                </a>
+                                &nbsp;
+                                <a th:id="@{opdelete + ${operation.id}}" th:href="@{'/delete_operation/' + ${operation.id}}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                    </svg>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="calendar">
+        <div class="month">
+            <i class="fas fa-angle-left prev"></i>
+            <div class="date">
+                <h1></h1>
+                <p></p>
+            </div>
+            <i class="fas fa-angle-right next"></i>
+        </div>
+        <div class="weekdays">
+            <div>Пн</div>
+            <div>Вт</div>
+            <div>Ср</div>
+            <div>Чт</div>
+            <div>Пт</div>
+            <div>Ст</div>
+            <div>Нд</div>
+        </div>
+        <div class="days"></div>
+    </div>
+</div>
+
+
+<script src="custom.js"></script>
+
+<script>
+
+</script>
+
+</body>
+</html>

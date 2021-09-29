@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendar</title>
+    <base href="/">
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="all.min.css"/>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    />
+
+
+</head>
+<body>
+
+<div class="container">
+
+    <div class="infoboard-frame">
+
+    <div class="menu" style="justify-content: center;">
+        <h1 >Редактирай операция</h1>
+    </div>
+
+    <div class="infoboard">
+        <div class="ops" align="center">
+
+            <br/>
+            <form action="#" th:action="@{/save}" th:object="${operation}" method="post">
+                <table border="0" cellpading="10">
+                    <tr>
+                        <td>Номер №: </td>
+                        <td><input class="mb-2" type="text" th:field="*{id}" readonly="readonly"/></td>
+                    </tr>
+                    <tr>
+                        <td>Дата: </td>
+                        <td><input class="mb-2" type="text" th:field="*{date}" readonly="readonly"/></td>
+                    </tr>
+                    <tr>
+                        <td>Вид операция: </td>
+                        <td>
+                            <select class="mb-2" id="name" type="text" th:field="*{name}" />
+                            <option value="Плитка оран">Плитка оран</option>
+                            <option value="Търсене на вредители">Търсене на вредители</option>
+                            <option value="Пръскане, вредители">Пръскане</option>
+                            <option value="Търсене на болести">Търсене на болести</option>
+                            <option value="Пръскане, болести">Пръскане</option>
+                            <option value="Плевене">Плевене</option>
+                            <option value="Подрязване">Подрязване</option>
+                            <option value="Колтучене">Подрязване</option>
+                            <option value="Филизене">Подрязване</option>
+                            <option value="Дълбока оран">Подрязване</option>
+                            <option value="Загърляне">Подрязване</option>
+                            <option value="Бране">Подрязване</option>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>Себестойност: </td>
+                        <td><input class="mb-2" type="text" th:field="*{cost}"/></td>
+                    </tr>
+                    <tr>
+                        <td>Продължителност: </td>
+                        <td><input class="mb-2" type="text" th:field="*{duration}"/></td>
+                    </tr>
+                    <tr style="display: none">
+                        <td><select class="mb-2" type="number" th:field="*{culture}" />
+                            <option value="1">1</option>
+                        </td>
+                    </tr>
+                </table>
+                <div style="margin-top: 15px;">
+                    <tr>
+                        <td colspan="3"><button class="btn" type="submit">Запис</button></td>
+                        <td>&nbsp;</td>
+                        <td colspan="2"><button class="btn" id="cancel" onclick="clearFilter()">Отказ</button></td>
+                    </tr>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    <div class="calendar">
+        <div class="month">
+            <i class="fas prev"><</i>
+            <div class="date">
+                <h1></h1>
+                <p></p>
+            </div>
+            <i class="fas next">></i>
+        </div>
+        <div class="weekdays">
+            <div>Пн</div>
+            <div>Вт</div>
+            <div>Ср</div>
+            <div>Чт</div>
+            <div>Пт</div>
+            <div>Ст</div>
+            <div>Нд</div>
+        </div>
+        <div class="days"></div>
+    </div>
+</div>
+<script src="custom.js"></script>
+</body>
+</html>

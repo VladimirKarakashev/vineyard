@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendar</title>
+    <link rel="stylesheet" th:href="@{style.css}" />
+    <link rel="stylesheet" th:href="@{scrollbar.css}" />
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+    />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+    />
+
+
+</head>
+<body>
+
+<div class="container">
+
+<div class="infoboard-frame">
+
+    <div class="menu">
+        <div class="menu-items">
+            <a id="m1" class="nav-link" th:href="@{/index}">
+                <div>Култура</div>
+            </a>
+            &nbsp;&nbsp;&nbsp;
+            <a id="m2" class="nav-link" th:href="@{/phenophase}">
+                <div>Фенофаза</div>
+            </a>
+            &nbsp;&nbsp;&nbsp;
+            <a id="m3" class="nav-link" th:href="@{/operations}">
+                <div>Операции</div>
+            </a>
+            &nbsp;&nbsp;&nbsp;
+            <a id="m4" class="nav-link" th:href="@{/logout}">
+                <div>Изход</div>
+            </a>
+        </div>
+    </div>
+
+    <div class="infoboard">
+        <div class="display-info">
+            <div class="pheno" th:id="${phenophase.name}" th:each="phenophase : ${phenophaseList}">
+                <h1 th:text="'Фенофаза ' + ${phenophase.name}"></h1>
+
+                <div th:replace="@{'fragments/phenophase/' + ${phenophase.description}} :: ${phenophase.description}"></div>
+
+                <div th:replace="@{'fragments/practices/' + ${phenophase.practices}} :: ${phenophase.practices}"></div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="calendar">
+        <div class="month">
+            <i class="fas fa-angle-left prev" ></i>
+            <div class="date">
+                <h1 id="month-string"></h1>
+                <p></p>
+            </div>
+            <i class="fas fa-angle-right next" ></i>
+        </div>
+        <div class="weekdays">
+            <div>Пн</div>
+            <div>Вт</div>
+            <div>Ср</div>
+            <div>Чт</div>
+            <div>Пт</div>
+            <div>Ст</div>
+            <div>Нд</div>
+        </div>
+        <div class="days"></div>
+    </div>
+</div>
+
+<script src="custom.js"></script>
+
+<script>
+    function showPhenophase() {
+      var month = document.getElementById("month-string").innerHTML;
+      var pheno = document.getElementsByClassName("pheno");
+
+      for(var i = 0; i < pheno.length; i++){
+          if(pheno[i].id === month) {
+                pheno[i].style.display = "block";
+          } else {
+                pheno[i].style.display = "none";
+          };
+       };
+    };
+
+document.querySelector(".prev").addEventListener("click", () => {
+  showPhenophase();
+});
+
+document.querySelector(".next").addEventListener("click", () => {
+  showPhenophase();
+});
+
+window.onload = showPhenophase();
+</script>
+
+
+</body>
+</html>
