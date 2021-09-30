@@ -29,7 +29,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/","/h2/**","/adminpanel*")
                 .hasRole("ADMIN")
                 .antMatchers("/operations*", "/phenophase*", "/index*","/edit_operation*"
-                        , "/new_operation*","/basics/terminology*"
+                        , "/new_operation*", "/basics**"
+                        ,"/basics/terminology*"
                         , "/basics/useful_tips*", "/basics/common_mistakes*"
                         , "/basics/pests*"
                         , "/basics/illnesses*" )
